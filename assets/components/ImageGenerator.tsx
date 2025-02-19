@@ -28,13 +28,13 @@ export default function ImageGenerator() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
-  const replicate = new Replicate({
-    auth: 'r8_QcdEo4VEu5whb5towmUPL8OzSl1JXnj05KI6a',
-  });
+  const token = process.env.EXPO_PUBLIC_REPLICATE_AUTH_TOKEN
+
 
   const generateImage = async () => {
     if (!prompt.trim()) {
       setError('Please enter a prompt');
+      console.log(token)
       return;
     }
   
@@ -46,7 +46,7 @@ export default function ImageGenerator() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Token r8_QcdEo4VEu5whb5towmUPL8OzSl1JXnj05KI6a`,  // Replace YOUR_API_KEY with your Replicate token
+          Authorization: `Token ${token}`,  // Replace YOUR_API_KEY with your Replicate token
         },
         body: JSON.stringify({
           version: '5599ed30703defd1d160a25a63321b4dec97101d98b4674bcc56e41f62f35637',  // Model version ID
@@ -78,7 +78,7 @@ export default function ImageGenerator() {
       while (!predictionResult || predictionResult.status !== 'succeeded') {
         const resultResponse = await fetch(`https://api.replicate.com/v1/predictions/${predictionId}`, {
           headers: {
-            Authorization: `Token r8_QcdEo4VEu5whb5towmUPL8OzSl1JXnj05KI6a`,  // Replace YOUR_API_KEY with your Replicate token
+            Authorization: `Token ${token}`,  // Replace YOUR_API_KEY with your Replicate token
           },
         });
   
